@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Repositories\PostsRepository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Redis;
 
