@@ -14,13 +14,13 @@ class RedisService
     public const POST_DELETED = 'post_deleted';
 
 
-    public function storeInQueue(array $data, string $type) : void
+    public function storeInQueue(Model $data, string $type) : void
     {
         $notificationServices = config('notification_microservices');
         if (!empty($notificationServices)) {
             foreach ($notificationServices as $service) {
                 $data['type'] = $type;
-                Redis::connection('default')->rpush($service, json_encode($data));
+                Redis::publish($service, json_encode($data));
             }
         }
     }

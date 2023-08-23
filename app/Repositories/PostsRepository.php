@@ -18,16 +18,20 @@ class PostsRepository
         return Posts::create($attributes);
     }
 
-    public function update(array $data) : bool
+    public function update(array $data) : Model
     {
         $post = self::find($data['id']);
+        $post->update($data);
 
-        return $post->update($data);
+        return $post;
     }
 
-    public function destroy($id): bool
+    public function destroy($id): Model
     {
-        return Posts::destroy($id);
+        $post = self::find($id);
+        $post->delete();
+
+        return $post;
     }
 
 }

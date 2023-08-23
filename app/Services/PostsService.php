@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\Posts;
 use App\Repositories\PostsRepository;
-use Illuminate\Support\Facades\Redis;
+use Illuminate\Database\Eloquent\Model;
 
 class PostsService
 {
@@ -21,22 +21,25 @@ class PostsService
     public function storePost(array $request) : Posts
     {
         $post = $this->postsRepository->create($request);
-        $this->redisService->storeInQueue($request, RedisService::POST_CREATED);
+        $this->redisService->storeInQueue($post, RedisService::POST_CREATED);
 
-        return $this->postsRepository->create($request);
+        return $post;
     }
 
-    public function updatePost(array $request) : bool
+    public function updatePost(array $request) : Model
     {
-        $this->redisService->storeInQueue($request, RedisService::POST_UPDATED);
-        return $this->postsRepository->update($request);
+        $post = $this->postsRepository->update($request);
+        $this->redisService->storeInQueue($post, RedisService::POST_UPDATED);
+
+        return $post;
     }
 
-    public function deletePost(int $id) : bool
+    public function deletePost(int $id) : Model
     {
-        $this->redisService->storeInQueue(['id' => $id], RedisService::POST_DELETED);
+        $post = $this->postsRepository->destroy($id);
+        $this->redisService->storeInQueue($post, RedisService::POST_DELETED);
 
-        return $this->postsRepository->destroy($id);
+        return $post;
     }
 
 }
