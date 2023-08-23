@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +14,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::get('/', function () {dd(123);});
+Route::post('/store', 'App\Http\Controllers\PostsController@store');
+Route::put('/update', 'App\Http\Controllers\PostsController@update');
+Route::delete('/delete', 'App\Http\Controllers\PostsController@destroy');
+
+//Route::get('/test', 'App\Http\Controllers\PostsController@test');
